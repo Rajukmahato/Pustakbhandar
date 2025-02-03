@@ -1,59 +1,54 @@
-const { User } = require('../models');
-const bcrypt = require('bcryptjs');
-
+const { Book } = require('../models');
+ 
 module.exports = {
-  // Create a new user
-  createUser: async (req, res) => {
+  // Create a new book
+  createBook: async (req, res) => {
     try {
-      const { name, email, password, phone_number } = req.body;
-      console.log('Creating user with data:', req.body); // Log the request body
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const user = await User.create({ name, email, password: hashedPassword, phone_number });
-      console.log('User created:', user); // Log the created user
-      res.status(201).json(user);
-    } catch (error) {
-      console.error('Error creating user:', error); // Log any errors
-      res.status(400).json({ error: error.message });
-    }
-  },
-
-  // Get all users
-  getUsers: async (req, res) => {
-    try {
-      const users = await User.findAll();
-      res.status(200).json(users);
+      const book = await Book.create(req.body);
+      res.status(201).json(book);
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
   },
-
-  // Update user
-  updateUser: async (req, res) => {
+ 
+  // Get all books
+  getBooks: async (req, res) => {
     try {
-      const user = await User.findByPk(req.params.id);
-      if (user) {
-        await user.update(req.body);
-        res.status(200).json(user);
+      const books = await Book.findAll();
+      res.status(200).json(books);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  },
+ 
+  // Update book
+  updateBook: async (req, res) => {
+    try {
+      const book = await Book.findByPk(req.params.id);
+      if (book) {
+        await book.update(req.body);
+        res.status(200).json(book);
       } else {
-        res.status(404).json({ message: 'User not found' });
+        res.status(404).json({ message: 'Book not found' });
       }
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
   },
-
-  // Delete user
-  deleteUser: async (req, res) => {
+ 
+  // Delete book
+  deleteBook: async (req, res) => {
     try {
-      const user = await User.findByPk(req.params.id);
-      if (user) {
-        await user.destroy();
-        res.status(200).json({ message: 'User deleted successfully' });
+      const book = await Book.findByPk(req.params.id);
+      if (book) {
+        await book.destroy();
+        res.status(200).json({ message: 'Book deleted successfully' });
       } else {
-        res.status(404).json({ message: 'User not found' });
+        res.status(404).json({ message: 'Book not found' });
       }
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
   }
 };
+ 
